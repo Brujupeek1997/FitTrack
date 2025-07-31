@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-black">Fit<span class="text-orange-500">Track</span></h1>
+                <p class="text-gray-600 dark:text-gray-300">Brujupeek</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="current-time" class="text-sm font-medium"></div>
+                <button id="dark-mode-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:inline"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 text-black dark:text-white">Today's Entry</h2>
+                    
+                    <form id="daily-form" class="space-y-4">
+                        <div>
+                            <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Weight (kg)</label>
+                            <input type="number" step="0.1" id="weight" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mood</label>
+                            <div class="mood-selector flex justify-between">
+                                <input type="radio" id="mood-happy" name="mood" value="happy" class="hidden">
+                                <label for="mood-happy" class="text-4xl">😃</label>
+                                
+                                <input type="radio" id="mood-neutral" name="mood" value="neutral" class="hidden">
+                                <label for="mood-neutral" class="text-4xl">😐</label>
+                                
+                                <input type="radio" id="mood-sad" name="mood" value="sad" class="hidden">
+                                <label for="mood-sad" class="text-4xl">😞</label>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="hunger" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hunger Level (1-5)</label>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm">1</span>
+                                <input type="range" min="1" max="5" value="3" id="hunger" class="w-full slider">
+                                <span class="text-sm">5</span>
+                            </div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">(1 = Not hungry, 5 = Very hungry)</div>
+                        </div>
+                        
+                        <div>
+                            <label for="activity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Activity Minutes</label>
+                            <select id="activity" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                <option value="0">0 min</option>
+                                <option value="30">30 min</option>
+                                <option value="60">60 min</option>
+                                <option value="90">90+ min</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+                            <textarea id="notes" rows="2" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="What did you eat? Any cheat meals?"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+                            Save Today's Progress
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="motivation-card" class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start">
+                        <div class="text-3xl mr-3">💪</div>
+                        <div>
+                            <h3 class="font-bold text-black dark:text-white">Motivation</h3>
+                            <p id="motivation-text" class="text-gray-700 dark:text-gray-300">Log your daily progress to get personalized motivation!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Today's Weight</div>
+                        <div id="current-weight" class="text-3xl font-bold text-black dark:text-white">-- kg</div>
+                        <div id="weight-change" class="text-sm"></div>
+                    </div>
+                    
+                    <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Weekly Change</div>
+                        <div id="weekly-change" class="text-2xl font-bold">-- kg</div>
+                        <div class="text-sm">vs last week</div>
+                    </div>
+                    
+                    <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Total Lost</div>
+                        <div id="total-lost" class="text-2xl font-bold">-- kg</div>
+                        <div class="text-sm">since you started</div>
+                    </div>
+                </div>
+                
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 text-black dark:text-white">Weight Progress</h2>
+                    <canvas id="weight-chart" height="200"></canvas>
+                </div>
+                
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-4 text-black dark:text-white">Daily Streak</h2>
+                    <div id="streak-calendar" class="grid grid-cols-7 gap-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 lg:hidden">
+            <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-bold mb-4 text-black dark:text-white">Recent Entries</h2>
+                <div id="recent-entries" class="space-y-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

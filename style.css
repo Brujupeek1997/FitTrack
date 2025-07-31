@@ -1,0 +1,78 @@
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .dark-mode {
+            background-color: #111827;
+            color: #f3f3f3;
+        }
+        
+        body:not(.dark-mode) .card {
+            background-color: white;
+            border-color: #e5e7eb;
+        }
+        
+        .dark-mode .card {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+        
+        .dark-mode input, .dark-mode select, .dark-mode textarea {
+            background-color: #333;
+            color: #fff;
+            border-color: #555;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f97316;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f97316;
+            cursor: pointer;
+        }
+        
+        .mood-selector input[type="radio"] {
+            display: none;
+        }
+        
+        .mood-selector label {
+            cursor: pointer;
+            font-size: 2rem;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+        
+        .mood-selector input[type="radio"]:checked + label {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        
+        .streak-day {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 640px) {
+            .streak-day {
+                width: 20px;
+                height: 20px;
+                font-size: 0.8rem;
+            }
+        }
